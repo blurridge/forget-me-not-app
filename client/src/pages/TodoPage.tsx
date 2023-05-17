@@ -1,4 +1,3 @@
-import React from "react";
 import { TodoWindow } from "../layouts/TodoWindow";
 import { DateInfo } from "../components/DateInfo";
 
