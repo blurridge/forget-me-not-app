@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+type DateProp = {
+  day: string;
+  month: string;
+  year: string;
+  dayWeek: string;
+};
+
 export const DateInfo = () => {
-  const [dateState, setDateState] = useState({
+  const [dateState, setDateState] = useState<DateProp>({
     day: new Date().toLocaleDateString("en-GB", {
       day: "numeric",
     }),
@@ -35,6 +42,7 @@ export const DateInfo = () => {
       0
     );
   }, []);
+
   return (
     <>
       <div className="flex justify-between text-white font-main">
