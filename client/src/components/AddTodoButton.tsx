@@ -1,5 +1,7 @@
 export const AddTodoButton = () => {
   return (
-    <div>AddTodoButton</div>
-  )
-}
+    <>
+      <div>AddTodoButton</div>
+    </>
+  );
+};

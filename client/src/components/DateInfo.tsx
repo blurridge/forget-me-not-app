@@ -45,10 +45,10 @@ export const DateInfo = () => {
 
   return (
     <>
-      <div className="flex justify-between text-white font-main">
+      <div className="flex justify-between text-white font-main drop-shadow-lg w-full">
         <div className="flex gap-1">
           <span className="font-bold text-6xl">{dateState.day}</span>
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-center">
             <span className="text-xl">{dateState.month}</span>
             <span className="text-xl">{dateState.year}</span>
           </div>
