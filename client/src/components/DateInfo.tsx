@@ -47,13 +47,15 @@ export const DateInfo = () => {
     <>
       <div className="flex justify-between text-white font-main drop-shadow-lg w-full">
         <div className="flex gap-1">
-          <span className="font-bold text-6xl">{dateState.day}</span>
+          <span className="font-bold text-7xl">{dateState.day}</span>
           <div className="flex flex-col justify-center">
-            <span className="text-xl">{dateState.month}</span>
-            <span className="text-xl">{dateState.year}</span>
+            <span className="text-2xl">{dateState.month}</span>
+            <span className="text-2xl">{dateState.year}</span>
           </div>
         </div>
-        <span className="font-main text-6xl">{dateState.dayWeek}</span>
+        <div className="flex flex-col justify-center items-center">
+          <span className="font-main text-5xl">{dateState.dayWeek}</span>
+        </div>
       </div>
     </>
   );
