@@ -7,7 +7,3 @@ export interface Todo {
 export interface ITodoProps {
   todos: Array<Todo>;
 }
-
-export interface ITodoProp {
-  todo: Todo;
-}
