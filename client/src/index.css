@@ -1,5 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend+Deca&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend+Deca&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.unshaded-circle {
+  background-color: transparent;
+  border: 3px solid white;
+  height: 18px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 18px;
+}
+
+.shaded-circle {
+  background-color: #FBC2EB;
+  border: 3px solid white;
+  height: 18px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 18px;
+}
