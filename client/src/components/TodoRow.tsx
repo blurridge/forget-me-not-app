@@ -4,8 +4,6 @@ interface ITodoProp {
   todo: Todo;
 }
 
-// TODO: Beautify button and add counting of tasks not done
-
 export const TodoRow = ({ todo }: ITodoProp) => {
   const [taskDone, setTaskDone] = useState<boolean>(todo.completed);
   const handleClick = () => {
