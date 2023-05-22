@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { AddTodoButton } from "../components/AddTodoButton";
 import { TodoList } from "../components/TodoList";
 import { Todo } from "../globals/types";
-import { Ripple, initTE } from "tw-elements";
 
 const todos: Todo[] = [
   {
@@ -25,9 +24,6 @@ const todos: Todo[] = [
 ];
 
 export const TodoWindow = () => {
-  useEffect(() => {
-    initTE({ Ripple });
-  }, []);
   return (
     <>
       <div className="flex flex-col bg-black bg-opacity-40 rounded-3xl p-7 w-full h-5/6 justify-between">
@@ -38,13 +34,7 @@ export const TodoWindow = () => {
           <TodoList todos={todos} />
         </div>
         <div className="mr-0 ml-auto">
-          <button
-            className="bg-lavender rounded-full px-10 py-8 text-white drop-shadow-2xl"
-            data-te-ripple-init
-            data-te-ripple-color="light"
-          >
-            +
-          </button>
+          <AddTodoButton />
         </div>
       </div>
     </>
