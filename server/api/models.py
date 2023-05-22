@@ -4,6 +4,7 @@ from django.db import models
 
 class Todo(models.Model):
     message = models.TextField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
     time_updated = models.DateTimeField(auto_now=True)
     time_created = models.DateTimeField(auto_now_add=True)
 
