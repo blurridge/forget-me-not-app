@@ -36,7 +36,7 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
     case ACTIONS.GET_TODOS:
         if(payload.initialTodo)
             return payload.initialTodo;
-        return todos;
+        return [];
     default:
       return todos;
   }

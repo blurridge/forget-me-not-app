@@ -7,7 +7,6 @@ export const TodoWindow = () => {
   const { todos } = TodoData();
   const [tasksLeft, setTasksLeft] = useState<number>(0);
   useEffect(() => {
-    console.log("RUNNING EFFECT FOR TASK COUNT");
     if (todos) {
       setTasksLeft(todos.filter((todo) => !todo.completed).length);
     }
@@ -20,14 +19,16 @@ export const TodoWindow = () => {
           <span className="font-main text-white text-2xl drop-shadow-lg mb-5">
             {tasksLeft} tasks left
           </span>
-          {todos !== undefined ? (
-            <TodoList todos={todos} />
-          ) : (
+        </div>
+        {todos.length !== 0 ? (
+          <TodoList todos={todos} />
+        ) : (
+          <div className="flex flex-col h-full w-full justify-center items-center">
             <span className="font-main text-white text-2xl drop-shadow-lg mb-5">
               Nothing forgotten.
             </span>
-          )}
-        </div>
+          </div>
+        )}
         <div className="mr-0 ml-auto">
           <AddTodoButton />
         </div>
