@@ -1,33 +1,38 @@
-import { createContext, useState, useContext, useEffect, Dispatch, SetStateAction, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  ReactNode,
+  useReducer,
+} from "react";
+import { reducer, initialState, ACTIONS } from "./reducer";
 import { Todo } from "../globals/types";
 
-interface ITodoDataContext {
-  todos: Todo[]
-  setTodos: Dispatch<SetStateAction<Todo[]>>
-}
+const TodoDataContext = createContext<{
+  todos: Todo[];
+  dispatch: React.Dispatch<any>;
+}>({
+  todos: initialState,
+  dispatch: () => null,
+});
 
-const TodoDataContext = createContext<Partial<ITodoDataContext>>({});
-
-export const TodoDataContextProvider = ({ children }: {children: ReactNode}) => {
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      message: "",
-      completed: false,
-      time_updated: new Date(0),
-      time_created: new Date(0),
-    },
-  ]);
+export const TodoDataContextProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [todos, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     const getTodos = async () => {
       const response: Response = await fetch("http://127.0.0.1:8000/api/todo/");
       const todoData: Todo[] = await response.json();
-      setTodos(todoData);
+      dispatch({ type: ACTIONS.GET_TODOS, payload: { initialTodo: todoData } });
     };
     getTodos();
   }, []);
 
   return (
-    <TodoDataContext.Provider value={{ todos, setTodos }}>
+    <TodoDataContext.Provider value={{ todos, dispatch }}>
       {children}
     </TodoDataContext.Provider>
   );

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Todo } from "../globals/types";
+import { TodoData } from "../context/TodoDataContext";
+import { ACTIONS } from "../context/reducer";
 interface ITodoProp {
   todo: Todo;
 }
 
 export const TodoRow = ({ todo }: ITodoProp) => {
+  const { dispatch } = TodoData();
   const [taskDone, setTaskDone] = useState<boolean>(todo.completed);
   const handleClick = () => {
     if (taskDone) {
@@ -12,6 +15,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     } else {
       setTaskDone(true);
     }
+    dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
   return (
     <>

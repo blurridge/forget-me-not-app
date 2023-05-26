@@ -1,4 +1,5 @@
 export interface Todo {
+  id: number;
   message: string;
   completed: boolean;
   time_updated: Date;
