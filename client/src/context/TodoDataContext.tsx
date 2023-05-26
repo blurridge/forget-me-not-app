@@ -24,7 +24,7 @@ export const TodoDataContextProvider = ({
   const [todos, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     const getTodos = async () => {
-      const response: Response = await fetch("http://127.0.0.1:8000/api/todo/");
+      const response: Response = await fetch("/api/todo");
       const todoData: Todo[] = await response.json();
       dispatch({ type: ACTIONS.GET_TODOS, payload: { initialTodo: todoData } });
     };
