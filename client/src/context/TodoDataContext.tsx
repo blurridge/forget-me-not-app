@@ -5,12 +5,12 @@ import {
   ReactNode,
   useReducer,
 } from "react";
-import { reducer, initialState, ACTIONS } from "./reducer";
+import { reducer, initialState, ACTIONS, CompletedAction } from "./reducer";
 import { Todo } from "../globals/types";
 
 const TodoDataContext = createContext<{
   todos: Todo[];
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<CompletedAction>;
 }>({
   todos: initialState,
   dispatch: () => null,
