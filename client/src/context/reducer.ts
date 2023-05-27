@@ -4,6 +4,7 @@ export enum ACTIONS {
   SET_COMPLETED = "set-completed",
   GET_TODOS = "get-todos",
   EDIT_TODO = "edit-todo",
+  DELETE_TODO = "delete-todo",
 }
 
 export const initialState: Todo[] = [
@@ -40,7 +41,11 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
       if (typeof payload.newMessage === "string") {
         return todos.map((todo: Todo) => {
           if (todo.id === payload.id) {
-            return { ...todo, message: payload.newMessage as string, time_updated: payload.updatedDate as Date};
+            return {
+              ...todo,
+              message: payload.newMessage as string,
+              time_updated: payload.updatedDate as Date,
+            };
           }
           return todo;
         });
@@ -51,6 +56,8 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
         return payload.initialTodo;
       }
       return [];
+    case ACTIONS.DELETE_TODO:
+      return todos.filter(todo => todo.id !== payload.id)
     default:
       return todos;
   }

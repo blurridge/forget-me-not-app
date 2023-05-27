@@ -17,7 +17,11 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     }
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
-  const sendUpdatesToContext = (e) => {
+  const sendUpdatesToContext = (
+    e:
+      | React.FocusEvent<HTMLDivElement, Element>
+      | React.KeyboardEvent<HTMLDivElement>
+  ) => {
     const isoDateString = new Date().toISOString();
     if (e.currentTarget.textContent !== todo.message) {
       dispatch({
