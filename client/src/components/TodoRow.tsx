@@ -17,6 +17,19 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     }
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
+  const sendUpdatesToContext = (e) => {
+    const isoDateString = new Date().toISOString();
+    if (e.currentTarget.textContent !== todo.message) {
+      dispatch({
+        type: ACTIONS.EDIT_TODO,
+        payload: {
+          id: todo.id,
+          newMessage: e.currentTarget.textContent || "",
+          updatedDate: new Date(isoDateString),
+        },
+      });
+    }
+  };
   return (
     <>
       <div className="flex gap-3">
@@ -50,34 +63,14 @@ export const TodoRow = ({ todo }: ITodoProp) => {
                 dir="ltr"
                 style={{ outline: "none" }}
                 onKeyDown={(e) => {
-                  const isoDateString = new Date().toISOString();
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    if (e.currentTarget.textContent !== todo.message) {
-                      dispatch({
-                        type: ACTIONS.EDIT_TODO,
-                        payload: {
-                          id: todo.id,
-                          newMessage: e.currentTarget.textContent || "",
-                          updatedDate: new Date(isoDateString),
-                        },
-                      });
-                    }
+                    sendUpdatesToContext(e);
                   }
                 }}
                 onBlur={(e) => {
-                  const isoDateString = new Date().toISOString();
                   e.preventDefault();
-                  if (e.currentTarget.textContent !== todo.message) {
-                    dispatch({
-                      type: ACTIONS.EDIT_TODO,
-                      payload: {
-                        id: todo.id,
-                        newMessage: e.currentTarget.textContent || "",
-                        updatedDate: new Date(isoDateString),
-                      },
-                    });
-                  }
+                  sendUpdatesToContext(e);
                 }}
               >
                 {todo.message}
