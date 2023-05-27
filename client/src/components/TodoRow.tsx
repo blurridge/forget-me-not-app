@@ -33,34 +33,41 @@ export const TodoRow = ({ todo }: ITodoProp) => {
             ></button>
           )}
         </div>
-        <div className="text-white font-main text-2xl drop-shadow-lg my-4">
-          {taskDone ? (
-            <span style={{ textDecoration: "line-through" }}>
-              {todo.message}
-            </span>
-          ) : (
-            <span
-              contentEditable="true"
-              suppressContentEditableWarning={true}
-              dir="ltr"
-              onKeyDown={(e) => {
-                const isoDateString = new Date().toISOString();
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  dispatch({
-                    type: ACTIONS.EDIT_TODO,
-                    payload: {
-                      id: todo.id,
-                      newMessage: e.currentTarget.textContent || "",
-                      updatedDate: new Date(isoDateString),
-                    },
-                  });
-                }
-              }}
-            >
-              {todo.message}
-            </span>
-          )}
+        <div className="text-white font-main text-2xl drop-shadow-lg my-4 w-11/12 text-justify pointer-events-none">
+          <div className="inline-block max-w-full">
+            {taskDone ? (
+              <div
+                className="break-words pointer-events-auto"
+                style={{ textDecoration: "line-through", outline: "none" }}
+              >
+                {todo.message}
+              </div>
+            ) : (
+              <div
+                className="break-words pointer-events-auto"
+                contentEditable="true"
+                suppressContentEditableWarning={true}
+                dir="ltr"
+                style={{ outline: "none" }}
+                onKeyDown={(e) => {
+                  const isoDateString = new Date().toISOString();
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    dispatch({
+                      type: ACTIONS.EDIT_TODO,
+                      payload: {
+                        id: todo.id,
+                        newMessage: e.currentTarget.textContent || "",
+                        updatedDate: new Date(isoDateString),
+                      },
+                    });
+                  }
+                }}
+              >
+                {todo.message}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
