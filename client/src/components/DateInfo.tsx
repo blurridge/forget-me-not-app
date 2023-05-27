@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Animate, initTE } from "tw-elements";
 
 type DateProp = {
   day: string;
@@ -8,6 +9,9 @@ type DateProp = {
 };
 
 export const DateInfo = () => {
+  useEffect(() => {
+    initTE({ Animate });
+  }, []);
   const [dateState, setDateState] = useState<DateProp>({
     day: new Date().toLocaleDateString("en-GB", {
       day: "numeric",
@@ -45,7 +49,13 @@ export const DateInfo = () => {
 
   return (
     <>
-      <div className="flex justify-between text-white font-main drop-shadow-lg w-full">
+      <div
+        data-te-animation-init
+        data-te-animation-start="onLoad"
+        data-te-animation-reset="true"
+        data-te-animation="[fade-in_1s_ease-in-out]"
+        className="flex justify-between text-white font-main drop-shadow-lg w-full"
+      >
         <div className="flex gap-1">
           <span className="font-bold text-7xl">{dateState.day}</span>
           <div className="flex flex-col justify-center">

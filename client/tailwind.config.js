@@ -5,6 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/tw-elements/dist/js/**/*.js",
   ],
+  safelist: ['animate-[fade-in_1s_ease-in-out], animate-[fade-in_2s_ease-in-out]'],
   theme: {
     extend: {
       backgroundImage: {
