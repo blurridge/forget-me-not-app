@@ -11,6 +11,8 @@ export const TodoWindow = () => {
     initTE({ Animate });
   }, []);
   useEffect(() => {
+    console.log("TODOS CHANGED!");
+    console.log(todos);
     if (todos) {
       setTasksLeft(todos.filter((todo) => !todo.completed).length);
     }

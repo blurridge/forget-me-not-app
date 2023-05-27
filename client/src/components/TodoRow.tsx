@@ -37,14 +37,14 @@ export const TodoRow = ({ todo }: ITodoProp) => {
           <div className="inline-block max-w-full">
             {taskDone ? (
               <div
-                className="break-words pointer-events-auto"
+                className="break-words pointer-events-auto min-w-[20px]"
                 style={{ textDecoration: "line-through", outline: "none" }}
               >
                 {todo.message}
               </div>
             ) : (
               <div
-                className="break-words pointer-events-auto"
+                className="break-words pointer-events-auto min-w-[20px]"
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 dir="ltr"
@@ -53,6 +53,22 @@ export const TodoRow = ({ todo }: ITodoProp) => {
                   const isoDateString = new Date().toISOString();
                   if (e.key === "Enter") {
                     e.preventDefault();
+                    if (e.currentTarget.textContent !== todo.message) {
+                      dispatch({
+                        type: ACTIONS.EDIT_TODO,
+                        payload: {
+                          id: todo.id,
+                          newMessage: e.currentTarget.textContent || "",
+                          updatedDate: new Date(isoDateString),
+                        },
+                      });
+                    }
+                  }
+                }}
+                onBlur={(e) => {
+                  const isoDateString = new Date().toISOString();
+                  e.preventDefault();
+                  if (e.currentTarget.textContent !== todo.message) {
                     dispatch({
                       type: ACTIONS.EDIT_TODO,
                       payload: {
