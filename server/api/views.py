@@ -53,3 +53,12 @@ def get_todo(request, id):
     todos = Todo.objects.get(id=id)
     serializer = TodoSerializer(todos, many=False)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+def edit_todo(request, id):
+    data = request.data
+    todo = Todo.objects.get(id=id)
+    serializer = TodoSerializer(instance=todo, data=data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)

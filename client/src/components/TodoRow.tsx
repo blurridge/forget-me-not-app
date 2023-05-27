@@ -21,11 +21,17 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     <>
       <div className="flex gap-3">
         <div className="flex flex-col justify-center">
-        {taskDone ? (
-          <button className="shaded-circle drop-shadow-lg" onClick={handleClick}></button>
-        ) : (
-          <button className="unshaded-circle drop-shadow-lg" onClick={handleClick}></button>
-        )}
+          {taskDone ? (
+            <button
+              className="shaded-circle drop-shadow-lg"
+              onClick={handleClick}
+            ></button>
+          ) : (
+            <button
+              className="unshaded-circle drop-shadow-lg"
+              onClick={handleClick}
+            ></button>
+          )}
         </div>
         <div className="text-white font-main text-2xl drop-shadow-lg my-4">
           {taskDone ? (
@@ -33,7 +39,27 @@ export const TodoRow = ({ todo }: ITodoProp) => {
               {todo.message}
             </span>
           ) : (
-            todo.message
+            <span
+              contentEditable="true"
+              suppressContentEditableWarning={true}
+              dir="ltr"
+              onKeyDown={(e) => {
+                const isoDateString = new Date().toISOString();
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  dispatch({
+                    type: ACTIONS.EDIT_TODO,
+                    payload: {
+                      id: todo.id,
+                      newMessage: e.currentTarget.textContent || "",
+                      updatedDate: new Date(isoDateString),
+                    },
+                  });
+                }
+              }}
+            >
+              {todo.message}
+            </span>
           )}
         </div>
       </div>

@@ -7,6 +7,8 @@ export const TodoWindow = () => {
   const { todos } = TodoData();
   const [tasksLeft, setTasksLeft] = useState<number>(0);
   useEffect(() => {
+    console.log("TODOS CHANGED!")
+    console.log(todos);
     if (todos) {
       setTasksLeft(todos.filter((todo) => !todo.completed).length);
     }

@@ -3,6 +3,7 @@ import { Todo } from "../globals/types";
 export enum ACTIONS {
   SET_COMPLETED = "set-completed",
   GET_TODOS = "get-todos",
+  EDIT_TODO = "edit-todo",
 }
 
 export const initialState: Todo[] = [
@@ -20,6 +21,8 @@ export interface CompletedAction {
   payload: {
     id?: number;
     initialTodo?: Todo[];
+    newMessage?: string;
+    updatedDate?: Date;
   };
 }
 
@@ -33,10 +36,21 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
         }
         return todo;
       });
+    case ACTIONS.EDIT_TODO:
+      if (typeof payload.newMessage === "string") {
+        return todos.map((todo: Todo) => {
+          if (todo.id === payload.id) {
+            return { ...todo, message: payload.newMessage as string, time_updated: payload.updatedDate as Date};
+          }
+          return todo;
+        });
+      }
+      return todos;
     case ACTIONS.GET_TODOS:
-        if(payload.initialTodo)
-            return payload.initialTodo;
-        return [];
+      if (payload.initialTodo) {
+        return payload.initialTodo;
+      }
+      return [];
     default:
       return todos;
   }
