@@ -2,19 +2,14 @@ import { useEffect, useState } from "react";
 import { Todo } from "../globals/types";
 import { TodoData } from "../context/TodoDataContext";
 import { ACTIONS } from "../context/reducer";
+import { sleep } from "../globals/functions";
 interface ITodoProp {
   todo: Todo;
 }
 
 export const TodoRow = ({ todo }: ITodoProp) => {
   const { dispatch } = TodoData();
-  const [taskDone, setTaskDone] = useState<boolean>(todo.completed);
-  const handleClick = () => {
-    if (taskDone) {
-      setTaskDone(false);
-    } else {
-      setTaskDone(true);
-    }
+  const handleClick = async () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
   const sendUpdatesToContext = (
@@ -36,31 +31,36 @@ export const TodoRow = ({ todo }: ITodoProp) => {
   };
   useEffect(() => {
     const deleteEmptyMessages = () => {
-      if(todo.message === "") {
+      if (todo.message === "") {
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       }
-    }
+    };
     deleteEmptyMessages();
-  }, [todo.message])
+  }, [todo.message]);
+  useEffect(() => {
+    const deleteCompletedTodo = async () => {
+      if (todo.completed) {
+        await sleep(2000);
+        console.log("TODO DELETING!");
+        dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
+      }
+    };
+    deleteCompletedTodo();
+  }, [todo.completed]);
   return (
     <>
       <div className="flex gap-3">
         <div className="flex flex-col justify-center">
-          {taskDone ? (
-            <button
-              className="shaded-circle drop-shadow-lg"
-              onClick={handleClick}
-            ></button>
-          ) : (
-            <button
-              className="unshaded-circle drop-shadow-lg"
-              onClick={handleClick}
-            ></button>
-          )}
+          <button
+            className={`${
+              todo.completed ? "shaded-circle" : "unshaded-circle"
+            } drop-shadow-lg`}
+            onClick={handleClick}
+          ></button>
         </div>
         <div className="text-white font-main text-2xl drop-shadow-lg my-4 w-11/12 text-justify pointer-events-none">
           <div className="inline-block max-w-full">
-            {taskDone ? (
+            {todo.completed ? (
               <div
                 className="break-words pointer-events-auto min-w-[20px]"
                 style={{ textDecoration: "line-through", outline: "none" }}
