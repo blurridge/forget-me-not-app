@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Todo } from "../globals/types";
 import { TodoData } from "../context/TodoDataContext";
 import { ACTIONS } from "../context/reducer";
@@ -34,6 +34,14 @@ export const TodoRow = ({ todo }: ITodoProp) => {
       });
     }
   };
+  useEffect(() => {
+    const deleteEmptyMessages = () => {
+      if(todo.message === "") {
+        dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
+      }
+    }
+    deleteEmptyMessages();
+  }, [todo.message])
   return (
     <>
       <div className="flex gap-3">
