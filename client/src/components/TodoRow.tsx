@@ -13,6 +13,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
   const { dispatch } = TodoData();
   const { addingState, setAddingState } = AddingState();
   const inputRef = useRef<any>(null);
+  const originalMessage = useRef<string>(todo.message);
   const markComplete = () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
@@ -96,16 +97,20 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     }
   }, [inputRef]);
   useEffect(() => {
-    const deleteEmptyMessages = () => {
-      if (todo.message === "" && addingState === false) {
+    const manageMessages = () => {
+      if (todo.message === "") {
         sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
-      } else {
+      } else if (
+        todo.message !== "" &&
+        todo.message !== originalMessage.current
+      ) {
         sendUpdatesToBackend("EDIT");
+        originalMessage.current = todo.message;
       }
     };
     if (todo.id !== 0) {
-      deleteEmptyMessages();
+      manageMessages();
     }
   }, [todo.message]);
   useEffect(() => {
