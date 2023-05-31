@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Todo } from "../globals/types";
 import { TodoData } from "../context/TodoDataContext";
 import { ACTIONS } from "../context/reducer";
@@ -9,7 +9,7 @@ interface ITodoProp {
 
 export const TodoRow = ({ todo }: ITodoProp) => {
   const { dispatch } = TodoData();
-  const handleClick = async () => {
+  const markComplete = () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
   const sendUpdatesToContext = (
@@ -29,22 +29,36 @@ export const TodoRow = ({ todo }: ITodoProp) => {
       });
     }
   };
+  const sendUpdatesToBackend = async () => {
+    try {
+      await fetch(`/api/todo/${todo.id}/edit`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(todo),
+      });
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
+  };
   useEffect(() => {
     const deleteEmptyMessages = () => {
       if (todo.message === "") {
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       }
     };
+    sendUpdatesToBackend();
     deleteEmptyMessages();
   }, [todo.message]);
   useEffect(() => {
     const deleteCompletedTodo = async () => {
       if (todo.completed) {
         await sleep(2000);
-        console.log("TODO DELETING!");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       }
     };
+    sendUpdatesToBackend();
     deleteCompletedTodo();
   }, [todo.completed]);
   return (
@@ -55,7 +69,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
             className={`${
               todo.completed ? "shaded-circle" : "unshaded-circle"
             } drop-shadow-lg`}
-            onClick={handleClick}
+            onClick={markComplete}
           ></button>
         </div>
         <div className="text-white font-main text-2xl drop-shadow-lg my-4 w-11/12 text-justify pointer-events-none">
@@ -78,11 +92,13 @@ export const TodoRow = ({ todo }: ITodoProp) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
                     sendUpdatesToContext(e);
+                    sendUpdatesToBackend();
                   }
                 }}
                 onBlur={(e) => {
                   e.preventDefault();
                   sendUpdatesToContext(e);
+                  sendUpdatesToBackend();
                 }}
               >
                 {todo.message}

@@ -57,7 +57,7 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
       }
       return [];
     case ACTIONS.DELETE_TODO:
-      return todos.filter(todo => todo.id !== payload.id)
+      return todos.filter((todo) => todo.id !== payload.id);
     default:
       return todos;
   }

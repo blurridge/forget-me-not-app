@@ -28,7 +28,7 @@ def get_routes(request):
             'description': 'Creates new todo with data sent in post request'
         },
         {
-            'Endpoint': '/todo/id/update/',
+            'Endpoint': '/todo/id/edit/',
             'method': 'PUT',
             'body': {'body': ""},
             'description': 'Creates an existing todo with data sent in post request'

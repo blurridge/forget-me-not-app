@@ -5,8 +5,8 @@ export const TodoList = ({ todos }: ITodoProps) => {
   return (
     <>
       <div className="flex flex-col justify-start w-full h-full">
-        {todos.map((todo: Todo, index: number) => (
-          <TodoRow key={index} todo={todo} />
+        {todos.map((todo: Todo) => (
+          <TodoRow key={todo.id} todo={todo} />
         ))}
       </div>
     </>
