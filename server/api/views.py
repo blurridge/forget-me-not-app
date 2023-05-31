@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Todo
 from .serializers import TodoSerializer
+from .utils import *
 
 # Create your views here.
 
@@ -11,68 +12,29 @@ def get_routes(request):
     routes = [
         {
             'Endpoint': '/todo/',
-            'method': 'GET',
+            'method': 'GET / POST',
             'body': None,
-            'description': 'Returns an array of todos'
+            'description': 'GET returns all todos, POST creates a new todo'
         },
         {
             'Endpoint': '/todo/id',
-            'method': 'GET',
+            'method': 'PUT / DELETE',
             'body': None,
-            'description': 'Returns a single todo object'
-        },
-        {
-            'Endpoint': '/todo/create/',
-            'method': 'POST',
-            'body': {'body': ""},
-            'description': 'Creates new todo with data sent in post request'
-        },
-        {
-            'Endpoint': '/todo/id/edit/',
-            'method': 'PUT',
-            'body': {'body': ""},
-            'description': 'Creates an existing todo with data sent in post request'
-        },
-        {
-            'Endpoint': '/todo/id/delete/',
-            'method': 'DELETE',
-            'body': None,
-            'description': 'Deletes an existing todo'
+            'description': 'PUT allows you to edit a todo, DELETE removes a todo'
         },
     ]
     return Response(routes)
 
-@api_view(['GET'])
-def get_todos(request):
-    todos = Todo.objects.all()
-    serializer = TodoSerializer(todos, many=True)
-    return Response(serializer.data)
+@api_view(['GET', 'POST'])
+def manage_todos(request):
+    if request.method == "GET":
+        return get_todos(request)
+    if request.method == "POST":
+        return create_todo(request)
 
-@api_view(['GET'])
-def get_todo(request, id):
-    todos = Todo.objects.get(id=id)
-    serializer = TodoSerializer(todos, many=False)
-    return Response(serializer.data)
-
-@api_view(['PUT'])
-def edit_todo(request, id):
-    data = request.data
-    todo = Todo.objects.get(id=id)
-    serializer = TodoSerializer(instance=todo, data=data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-
-@api_view(['DELETE'])
-def delete_todo(request, id):
-    todo = Todo.objects.get(id=id)
-    todo.delete()
-    return Response('Todo deleted!')
-
-@api_view(['POST'])
-def create_todo(request):
-    data = request.data
-    serializer = TodoSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+@api_view(['PUT', 'DELETE'])
+def manage_current_todos(request, id):
+    if request.method == "PUT":
+        return edit_todo(request, id)
+    if request.method == "DELETE":
+        return delete_todo(request, id)

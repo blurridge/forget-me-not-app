@@ -50,7 +50,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
     switch (choice) {
       case "EDIT":
         try {
-          await fetch(`/api/todo/${todo.id}/edit`, {
+          await fetch(`/api/todo/${todo.id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
         break;
       case "DELETE":
         try {
-          await fetch(`/api/todo/${todo.id}/delete`, {
+          await fetch(`/api/todo/${todo.id}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
         break;
       case "CREATE":
         try {
-          await fetch(`/api/todo/create`, {
+          await fetch(`/api/todo/`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
