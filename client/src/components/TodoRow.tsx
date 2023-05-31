@@ -8,7 +8,7 @@ interface ITodoProp {
 }
 
 export const TodoRow = ({ todo }: ITodoProp) => {
-  const { dispatch } = TodoData();
+  const { todos, dispatch } = TodoData();
   const markComplete = () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
@@ -29,36 +29,60 @@ export const TodoRow = ({ todo }: ITodoProp) => {
       });
     }
   };
-  const sendUpdatesToBackend = async () => {
-    try {
-      await fetch(`/api/todo/${todo.id}/edit`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(todo),
-      });
-    } catch (error) {
-      console.error("Error updating todo:", error);
+  const sendUpdatesToBackend = async (choice: string) => {
+    switch (choice) {
+      case "EDIT":
+        try {
+          await fetch(`/api/todo/${todo.id}/edit`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(todo),
+          });
+        } catch (error) {
+          console.error("Error updating todo:", error);
+        }
+        break;
+      case "DELETE":
+        try {
+          await fetch(`/api/todo/${todo.id}/delete`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        } catch (error) {
+          console.error("Error deleting todo:", error);
+        }
+        break;
+      default:
+        return;
     }
   };
   useEffect(() => {
     const deleteEmptyMessages = () => {
       if (todo.message === "") {
+        sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       }
+      else {
+        sendUpdatesToBackend("EDIT");
+      }
     };
-    sendUpdatesToBackend();
     deleteEmptyMessages();
   }, [todo.message]);
   useEffect(() => {
     const deleteCompletedTodo = async () => {
       if (todo.completed) {
         await sleep(2000);
+        sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       }
+      else {
+        sendUpdatesToBackend("EDIT");
+      }
     };
-    sendUpdatesToBackend();
     deleteCompletedTodo();
   }, [todo.completed]);
   return (

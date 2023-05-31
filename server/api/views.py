@@ -62,3 +62,9 @@ def edit_todo(request, id):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_todo(request, id):
+    todo = Todo.objects.get(id=id)
+    todo.delete()
+    return Response('Todo deleted!')
