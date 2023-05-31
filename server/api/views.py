@@ -68,3 +68,11 @@ def delete_todo(request, id):
     todo = Todo.objects.get(id=id)
     todo.delete()
     return Response('Todo deleted!')
+
+@api_view(['POST'])
+def create_todo(request):
+    data = request.data
+    serializer = TodoSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)

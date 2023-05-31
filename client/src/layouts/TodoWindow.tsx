@@ -3,9 +3,11 @@ import { AddTodoButton } from "../components/AddTodoButton";
 import { TodoList } from "../components/TodoList";
 import { TodoData } from "../context/TodoDataContext";
 import { Animate, initTE } from "tw-elements";
+import { AddingState } from "../context/AddingStateContext";
 
 export const TodoWindow = () => {
   const { todos } = TodoData();
+  const { addingState } = AddingState();
   const [tasksLeft, setTasksLeft] = useState<number>(0);
   useEffect(() => {
     initTE({ Animate });
@@ -37,7 +39,7 @@ export const TodoWindow = () => {
               {tasksLeft} tasks left
             </span>
           </div>
-          {todos.length !== 0 ? (
+          {todos.length !== 0 || addingState ? (
             <TodoList todos={todos} />
           ) : (
             <div className="flex flex-col h-full w-full justify-center items-center">

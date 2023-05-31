@@ -5,6 +5,7 @@ export enum ACTIONS {
   GET_TODOS = "get-todos",
   EDIT_TODO = "edit-todo",
   DELETE_TODO = "delete-todo",
+  ADD_TODO = "add-todo",
 }
 
 export const initialState: Todo[] = [
@@ -24,6 +25,7 @@ export interface CompletedAction {
     initialTodo?: Todo[];
     newMessage?: string;
     updatedDate?: Date;
+    newTodo?: Todo;
   };
 }
 
@@ -56,6 +58,8 @@ export const reducer = (todos: Todo[], action: CompletedAction): Todo[] => {
         return payload.initialTodo;
       }
       return [];
+    case ACTIONS.ADD_TODO:
+      return [...todos, payload.newTodo as Todo]
     case ACTIONS.DELETE_TODO:
       return todos.filter((todo) => todo.id !== payload.id);
     default:

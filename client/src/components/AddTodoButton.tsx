@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { Ripple, initTE } from "tw-elements";
+import { AddingState } from "../context/AddingStateContext";
 
 export const AddTodoButton = () => {
+  const { addingState, setAddingState } = AddingState();
+  const updateAddingState = () => {
+    setAddingState(!addingState);
+  };
   useEffect(() => {
     initTE({ Ripple });
   }, []);
@@ -11,6 +16,7 @@ export const AddTodoButton = () => {
         className="bg-lavender rounded-full px-10 py-8 text-white drop-shadow-2xl"
         data-te-ripple-init
         data-te-ripple-color="light"
+        onClick={updateAddingState}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

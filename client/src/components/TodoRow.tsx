@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Todo } from "../globals/types";
 import { TodoData } from "../context/TodoDataContext";
 import { ACTIONS } from "../context/reducer";
-import { sleep } from "../globals/functions";
+import { sleep, getCurrentISODate } from "../globals/functions";
+import { AddingState } from "../context/AddingStateContext";
 interface ITodoProp {
   todo: Todo;
 }
 
 export const TodoRow = ({ todo }: ITodoProp) => {
+  let createdTodo: Todo;
   const { dispatch } = TodoData();
+  const { addingState, setAddingState } = AddingState();
+  const inputRef = useRef<any>(null);
   const markComplete = () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
@@ -17,16 +21,29 @@ export const TodoRow = ({ todo }: ITodoProp) => {
       | React.FocusEvent<HTMLDivElement, Element>
       | React.KeyboardEvent<HTMLDivElement>
   ) => {
-    const isoDateString = new Date().toISOString();
     if (e.currentTarget.textContent !== todo.message) {
       dispatch({
         type: ACTIONS.EDIT_TODO,
         payload: {
           id: todo.id,
           newMessage: e.currentTarget.textContent || "",
-          updatedDate: new Date(isoDateString),
+          updatedDate: getCurrentISODate(),
         },
       });
+    }
+  };
+  const createTodo = (divMessage: string) => {
+    if (divMessage !== "") {
+      const timeNow = getCurrentISODate();
+      createdTodo = {
+        id: Date.now(),
+        message: divMessage,
+        completed: false,
+        time_updated: timeNow,
+        time_created: timeNow,
+      };
+      dispatch({ type: ACTIONS.ADD_TODO, payload: { newTodo: createdTodo } });
+      sendUpdatesToBackend("CREATE");
     }
   };
   const sendUpdatesToBackend = async (choice: string) => {
@@ -56,20 +73,40 @@ export const TodoRow = ({ todo }: ITodoProp) => {
           console.error("Error deleting todo:", error);
         }
         break;
+      case "CREATE":
+        try {
+          await fetch(`/api/todo/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(createdTodo),
+          });
+        } catch (error) {
+          console.error("Error creating todo:", error);
+        }
+        break;
       default:
         return;
     }
   };
   useEffect(() => {
+    if (addingState && todo.id === 0) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
+  useEffect(() => {
     const deleteEmptyMessages = () => {
-      if (todo.message === "") {
+      if (todo.message === "" && addingState === false) {
         sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
       } else {
         sendUpdatesToBackend("EDIT");
       }
     };
-    deleteEmptyMessages();
+    if (todo.id !== 0) {
+      deleteEmptyMessages();
+    }
   }, [todo.message]);
   useEffect(() => {
     const deleteCompletedTodo = async () => {
@@ -113,13 +150,38 @@ export const TodoRow = ({ todo }: ITodoProp) => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    sendUpdatesToContext(e);
+                    if (todo.id !== 0) {
+                      sendUpdatesToContext(e);
+                    }
+                    if (
+                      addingState &&
+                      todo.id === 0 &&
+                      e.currentTarget.textContent !== ""
+                    ) {
+                      createTodo(e.currentTarget.textContent as string);
+                      setAddingState(!addingState);
+                    } else if (addingState) {
+                      setAddingState(!addingState);
+                    }
                   }
                 }}
                 onBlur={(e) => {
                   e.preventDefault();
-                  sendUpdatesToContext(e);
+                  if (todo.id !== 0) {
+                    sendUpdatesToContext(e);
+                  }
+                  if (
+                    addingState &&
+                    todo.id === 0 &&
+                    e.currentTarget.textContent !== ""
+                  ) {
+                    createTodo(e.currentTarget.textContent as string);
+                    setAddingState(!addingState);
+                  } else if (addingState) {
+                    setAddingState(!addingState);
+                  }
                 }}
+                ref={inputRef}
               >
                 {todo.message}
               </div>
