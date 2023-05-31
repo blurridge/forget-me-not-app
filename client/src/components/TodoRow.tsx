@@ -111,11 +111,9 @@ export const TodoRow = ({ todo }: ITodoProp) => {
   useEffect(() => {
     const deleteCompletedTodo = async () => {
       if (todo.completed) {
-        await sleep(2000);
+        await sleep(1000);
         sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
-      } else {
-        sendUpdatesToBackend("EDIT");
       }
     };
     deleteCompletedTodo();
