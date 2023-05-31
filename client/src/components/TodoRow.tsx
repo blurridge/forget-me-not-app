@@ -8,7 +8,7 @@ interface ITodoProp {
 }
 
 export const TodoRow = ({ todo }: ITodoProp) => {
-  const { todos, dispatch } = TodoData();
+  const { dispatch } = TodoData();
   const markComplete = () => {
     dispatch({ type: ACTIONS.SET_COMPLETED, payload: { id: todo.id } });
   };
@@ -65,8 +65,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
       if (todo.message === "") {
         sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
-      }
-      else {
+      } else {
         sendUpdatesToBackend("EDIT");
       }
     };
@@ -78,8 +77,7 @@ export const TodoRow = ({ todo }: ITodoProp) => {
         await sleep(2000);
         sendUpdatesToBackend("DELETE");
         dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
-      }
-      else {
+      } else {
         sendUpdatesToBackend("EDIT");
       }
     };
@@ -116,13 +114,11 @@ export const TodoRow = ({ todo }: ITodoProp) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
                     sendUpdatesToContext(e);
-                    sendUpdatesToBackend();
                   }
                 }}
                 onBlur={(e) => {
                   e.preventDefault();
                   sendUpdatesToContext(e);
-                  sendUpdatesToBackend();
                 }}
               >
                 {todo.message}
